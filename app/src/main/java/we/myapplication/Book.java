@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ *
  * Created by kazuki on 2016/09/24.
  */
 public class Book {
@@ -18,6 +19,16 @@ public class Book {
     private String Author;
     private String AuthorKana;
     private String ISBN;
+
+    public String getImage_URL() {
+        return Image_URL;
+    }
+
+    public void setImage_URL(String image_URL) {
+        Image_URL = image_URL;
+    }
+
+    private String Image_URL;
 
     public String getTitle() {
         return Title;
@@ -59,68 +70,7 @@ public class Book {
         this.ISBN = ISBN;
     }
 
-    // XML の解析
-    public void parseXML(InputStream xmlStream){
-        XmlPullParserFactory factory = null;
-        try {
-            factory = XmlPullParserFactory.newInstance();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        }
-        factory.setNamespaceAware(true);
 
-        try {
-            XmlPullParser xpp = factory.newPullParser();
-            xpp.setInput(xmlStream,"UTF-8");
-            String buffString = "";
-            int eventType = xpp.getEventType();
-            while (eventType != XmlPullParser.END_DOCUMENT){
-                String tag = null;
-                switch(eventType){
-                    case XmlPullParser.START_DOCUMENT:
-                        break;
-                    //開始タグ時
-                    case XmlPullParser.START_TAG:
-                        tag = xpp.getName();
-                        if(tag.equals("recordData")){
-                          while (eventType != XmlPullParser.END_DOCUMENT){
-                              if(xpp.getName() != null && xpp.getName().equals("value")){
-                                  this.Title = xpp.nextText();
-                                  xpp.next();
-                                  xpp.next();
-                                  buffString = xpp.getName();
-                                  if(xpp.getName() != null && xpp.getName().equals("transcription")){
-                                      this.TitleKana = xpp.nextText();
-                                  }
-                              }else if(xpp.getName() != null && xpp.getName().equals("name")){
-                                  this.Author = xpp.nextText();
-                                  xpp.next();
-                                  xpp.next();
-                                  buffString = xpp.getName();
-                                  if(xpp.getName() != null && xpp.getName().equals("transcription")){
-                                      this.AuthorKana = xpp.nextText();
-                                  }
-                                  break;
-                              }
-
-                              eventType = xpp.next();
-                          }
-                        }
-                        break;
-                }
-                eventType = xpp.next();
-            }
-
-
-
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
 
 
 

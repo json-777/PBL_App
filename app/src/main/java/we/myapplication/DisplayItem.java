@@ -7,13 +7,13 @@ import com.android.volley.toolbox.NetworkImageView;
 /**
  * Created by kazuki on 2016/09/25.
  */
-public class DisplayItems {
+public class DisplayItem {
     private String Title;
     private String Author;
     private String ImageURL;
 
     public String getTitle(){
-           return  this.Title;
+        return  this.Title;
     }
     public void setTitle(String title){
         this.Title = title;

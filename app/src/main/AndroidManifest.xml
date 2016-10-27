@@ -3,20 +3,20 @@
     package="we.myapplication">
 
     <application
-        android:name="com.activeandroid.app.Application"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <!--ActiveAndroidのデータベース名とバージョンを規定 -->
+        <!--ActiveAndroidのデータベース名とバージョンを規定
         <meta-data
             android:name="AA_DB_NAME"
             android:value="Books.db" />
         <meta-data
             android:name="AA_DB_VERSION"
             android:value="4" />
+            -->
 
         <activity android:name=".MainActivity">
             <intent-filter>

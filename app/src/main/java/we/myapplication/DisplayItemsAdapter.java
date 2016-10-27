@@ -13,6 +13,7 @@ import com.android.volley.toolbox.NetworkImageView;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +21,7 @@ import java.util.List;
  */
 public class DisplayItemsAdapter extends BaseAdapter {
     private Context context;
-    private List<DisplayItems> items;
-    private ImageLoader imageLoader;
+    private List<DisplayItem> items;
 
     private static class ViewHolder{
         TextView title;
@@ -29,10 +29,9 @@ public class DisplayItemsAdapter extends BaseAdapter {
         NetworkImageView image;
     }
 
-    public DisplayItemsAdapter(Context context,List<DisplayItems> items,RequestQueue queue){
+    public DisplayItemsAdapter(Context context ,List<DisplayItem> items){
         this.context = context;
         this.items = items;
-        this.imageLoader = new ImageLoader(queue,new LruCacheSample());
     }
 
     @Override
@@ -75,11 +74,19 @@ public class DisplayItemsAdapter extends BaseAdapter {
         }
 
         //Viewに反映
-        holder.title.setText(items.get(position).getTitle());
-        holder.author.setText(items.get(position).getAuthor());
-        holder.image.setImageUrl(items.get(position).getUrl(),imageLoader);
+         holder.title.setText(items.get(position).getTitle());
+         holder.author.setText(items.get(position).getAuthor());
+         holder.image.setImageUrl(items.get(position).getUrl(),Singleton.getInstance(context).getmImageLoader());
 
         return view;
+    }
+
+    public void addDisplayItems(Book book){
+        int index = items.size();
+        items.add(new DisplayItem());
+        items.get(items.size() - 1).setTitle(book.getTitle());
+        items.get(items.size() - 1).setAuthor(book.getAuthor());
+        notifyDataSetChanged();
     }
 
 }
