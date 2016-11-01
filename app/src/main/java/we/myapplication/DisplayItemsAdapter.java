@@ -82,7 +82,6 @@ public class DisplayItemsAdapter extends BaseAdapter {
     }
 
     public void addDisplayItems(Book book){
-        int index = items.size();
         items.add(new DisplayItem());
         items.get(items.size() - 1).setTitle(book.getTitle());
         items.get(items.size() - 1).setAuthor(book.getAuthor());

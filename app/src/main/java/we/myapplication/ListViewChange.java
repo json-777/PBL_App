@@ -26,7 +26,7 @@ import java.util.concurrent.TimeoutException;
  * このクラスはISBNコードの配列を与えるとBookインスタンスの変数全てに値を代入してBookの配列をArrayListとして返します
  * Created by kazuki on 2016/09/26.
  */
-public class Books {
+public class ListViewChange {
     private ArrayList<Book> books = new ArrayList<Book>();
     private DisplayItemsAdapter mAdapter;
     private Context mContext;
@@ -35,39 +35,38 @@ public class Books {
      * コンストラクタです
      * @param ISBN 書籍情報を取得するためのISBN番号（10桁or13桁）
      */
-    public Books(Context context,String[] ISBN,int imageSize,DisplayItemsAdapter adapter) {
+    public ListViewChange(Context context,String[] ISBN,int imageSize,DisplayItemsAdapter adapter) {
         mAdapter = adapter;
         mContext = context;
         boolean action = false;
         ArrayList<String> Urls = getBookUrlInfo(ISBN);
         for (int i = 0; i < ISBN.length;i++){
-            books.add(new Book());
+            BooksDatabase.getInstance().add(new Book());
             sendRequest(Urls.get(i),ISBN,imageSize);
         }
-
     }
 
     public void sendRequest(final String url,final  String[] ISBN,final int imageSize ){
-         VolleyXmlRequest mRequest  = new VolleyXmlRequest(
+        VolleyXmlRequest mRequest  = new VolleyXmlRequest(
                 Request.Method.GET
                 ,url
                 , null
                 , null
                 , new Response.Listener<InputStream>() {
-                      @Override
-                      public  void onResponse(InputStream response) {
-                          book = ParseXML.ParseXML(response);
-                          mAdapter.addDisplayItems(book);
+            @Override
+            public  void onResponse(InputStream response) {
+                BooksDatabase.getInstance().add(ParseXML.ParseXML(response));
+                mAdapter.addDisplayItems(book);
 
-                      }
-               }
+            }
+        }
                 , new Response.ErrorListener() {
-                   @Override
-                       public void onErrorResponse(VolleyError error) {
-                           // 通信失敗時の処理を行なう...
-                      }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                // 通信失敗時の処理を行なう...
+            }
 
-                }
+        }
         );
         Singleton.getInstance(mContext).getRequestQueue().add(mRequest);
 
