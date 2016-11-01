@@ -81,10 +81,10 @@ public class DisplayItemsAdapter extends BaseAdapter {
         return view;
     }
 
-    public void addDisplayItems(Book book){
+    public void addDisplayItem(Book book){
         items.add(new DisplayItem());
         items.get(items.size() - 1).setTitle(book.getTitle());
-        items.get(items.size() - 1).setAuthor(book.getAuthor());
+        items.get(items.size() - 1).setAuthor(book.getAuthor(0));
         notifyDataSetChanged();
     }
 

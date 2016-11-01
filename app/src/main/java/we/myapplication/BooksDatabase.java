@@ -27,5 +27,6 @@ public class BooksDatabase {
     }
     public int size(){ return Books.size();}
     public Book get(int index){return Books.get(index);}
+    public Book getLast(){return  Books.get(Books.size() - 1);}
 
 }

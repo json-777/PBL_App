@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.RequestFuture;
 import com.android.volley.toolbox.Volley;
 
+import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -22,31 +23,32 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import javax.xml.parsers.ParserConfigurationException;
+
 /**
  * このクラスはISBNコードの配列を与えるとBookインスタンスの変数全てに値を代入してBookの配列をArrayListとして返します
  * Created by kazuki on 2016/09/26.
  */
-public class ListViewChange {
-    private ArrayList<Book> books = new ArrayList<Book>();
-    private DisplayItemsAdapter mAdapter;
-    private Context mContext;
-    private Book book;
+ class ListViewChange {
+    private static ArrayList<Book> books = new ArrayList<Book>();
+    private static DisplayItemsAdapter mAdapter;
+    private static Context mContext;
     /**
      * コンストラクタです
      * @param ISBN 書籍情報を取得するためのISBN番号（10桁or13桁）
      */
-    public ListViewChange(Context context,String[] ISBN,int imageSize,DisplayItemsAdapter adapter) {
+    public  ListViewChange(Context context,String[] ISBN,int imageSize,DisplayItemsAdapter adapter) {
         mAdapter = adapter;
         mContext = context;
         boolean action = false;
         ArrayList<String> Urls = getBookUrlInfo(ISBN);
         for (int i = 0; i < ISBN.length;i++){
             BooksDatabase.getInstance().add(new Book());
-            sendRequest(Urls.get(i),ISBN,imageSize);
+            sendRequest(Urls.get(i));
         }
     }
 
-    public void sendRequest(final String url,final  String[] ISBN,final int imageSize ){
+    public static void sendRequest(String url ){
         VolleyXmlRequest mRequest  = new VolleyXmlRequest(
                 Request.Method.GET
                 ,url
@@ -55,8 +57,16 @@ public class ListViewChange {
                 , new Response.Listener<InputStream>() {
             @Override
             public  void onResponse(InputStream response) {
-                BooksDatabase.getInstance().add(ParseXML.ParseXML(response));
-                mAdapter.addDisplayItems(book);
+                try {
+                    BooksDatabase.getInstance().add(XmlParser.domParse(response));
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
+                    e.printStackTrace();
+                }
+                mAdapter.addDisplayItem(BooksDatabase.getInstance().getLast());
 
             }
         }
@@ -151,7 +161,7 @@ public class ListViewChange {
      *　国会図書館に問い合わせ用URLを取得する
      * @return 国会図書館に問い合わせ用URLを取得する(配列)
      */
-    private ArrayList<String> getBookUrlInfo(String[] ISBN){
+    private static ArrayList<String> getBookUrlInfo(String[] ISBN){
         ArrayList<String> ISBNs = new ArrayList<String>();
         for(int i = 0; i < ISBN.length;i++){
             String isbn = ISBN[i];

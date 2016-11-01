@@ -3,6 +3,7 @@ package we.myapplication;
 import android.icu.text.AlphabeticIndex;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -14,6 +15,8 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import android.view.LayoutInflater;
+
 
 import com.android.volley.toolbox.Volley;
 
@@ -43,27 +46,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ListView listView = (ListView)findViewById(R.id.listView);
         mQueue = Volley.newRequestQueue(this);
-        String[] ISBN = new String[]{"9784839960445","9784087033847","9784087033441"};
+        String[] ISBN = new String[]{"9784087033847","9784087033441"};
         ArrayList<DisplayItem> displayItemses = new ArrayList<DisplayItem>();
         DisplayItemsAdapter adapter  = new DisplayItemsAdapter(getApplicationContext(),displayItemses);
-        Books books = new Books(getApplicationContext(),ISBN,0,adapter);
+        ListViewChange books = new ListViewChange(getApplicationContext(),ISBN,0,adapter);
+
+        //ListViewのレイアウト設定
+        int padding = (int) (getResources().getDisplayMetrics().density * 8);
+        LayoutInflater inflater = LayoutInflater.from(getApplicationContext());
+        View header = inflater.inflate(R.layout.listview_header_footer,listView,false);
+        View footer = inflater.inflate(R.layout.listview_header_footer,listView,false);
+        listView.addHeaderView(header,null,false);
+        listView.addFooterView(footer,null,false);
+        listView.setDivider(null);
+        listView.setScrollBarStyle(ListView.SCROLLBARS_OUTSIDE_OVERLAY);
+        listView.setPadding(padding, 0, padding, 0);
         listView.setAdapter(adapter);
 
     }
 
-
-
-
-    static String convertInputStreamToString(InputStream is) throws IOException {
-        InputStreamReader reader = new InputStreamReader(is);
-        StringBuilder builder = new StringBuilder();
-        char[] buffer = new char[512];
-        int read;
-        while (0 <= (read = reader.read(buffer))) {
-            builder.append(buffer, 0, read);
-        }
-        return builder.toString();
-    }
 
 }
 
