@@ -15,6 +15,7 @@ import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -22,8 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.zip.InflaterInputStream;
 
 import javax.xml.parsers.ParserConfigurationException;
+
+import static we.myapplication.XmlParser.*;
 
 /**
  * このクラスはISBNコードの配列を与えるとBookインスタンスの変数全てに値を代入してBookの配列をArrayListとして返します
@@ -57,8 +61,9 @@ import javax.xml.parsers.ParserConfigurationException;
                 , new Response.Listener<InputStream>() {
             @Override
             public  void onResponse(InputStream response) {
+                XmlParser parser = new XmlParser();
                 try {
-                    BooksDatabase.getInstance().add(XmlParser.domParse(response));
+                    BooksDatabase.getInstance().add( parser.domParse(response));
                 } catch (SAXException e) {
                     e.printStackTrace();
                 } catch (IOException e) {
@@ -66,8 +71,8 @@ import javax.xml.parsers.ParserConfigurationException;
                 } catch (ParserConfigurationException e) {
                     e.printStackTrace();
                 }
-                mAdapter.addDisplayItem(BooksDatabase.getInstance().getLast());
-
+                Book b = BooksDatabase.getInstance().getLast();
+                String a = b.getTitle();
             }
         }
                 , new Response.ErrorListener() {

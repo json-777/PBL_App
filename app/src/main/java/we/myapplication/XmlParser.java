@@ -18,7 +18,7 @@ import javax.xml.parsers.ParserConfigurationException;
  */
 
 public class XmlParser {
-    public static Book domParse(InputStream file) throws SAXException, IOException, ParserConfigurationException {
+    public  Book domParse(InputStream file) throws SAXException, IOException, ParserConfigurationException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = factory.newDocumentBuilder();
         Document document = documentBuilder.parse(file);
@@ -26,6 +26,7 @@ public class XmlParser {
         Element root = document.getDocumentElement();
 
         // ルート要素の子ノードを取得する
+        System.out.println("------------------");
 
         NodeList rootChildren = root.getChildNodes();
         for (int i = 0; i < rootChildren.getLength(); i++) {
@@ -104,7 +105,7 @@ public class XmlParser {
                                                                                                 if (personNode6.getNodeType() == Node.ELEMENT_NODE) {
                                                                                                     Element element7 = (Element) personNode6;
                                                                                                     if (element7.getNodeName().equals("foaf:name")) {
-                                                                                                        book.setPublisher(EditText(personNode6.getNodeName(), personNode6.getTextContent()));
+                                                                                                      //  book.setPublisher(EditText(personNode6.getNodeName(), personNode6.getTextContent()));
                                                                                                     }
                                                                                                 }
                                                                                             }
@@ -112,10 +113,10 @@ public class XmlParser {
                                                                                     }
                                                                                 }
                                                                             } else if (personNode4.getNodeName().equals("rdfs:seeAlso")) {
-                                                                                String buf = EditText(personNode4.getNodeName(), personNode4.getTextContent());
-                                                                                String[] tmp = buf.split("/");
-                                                                                if (tmp[tmp.length - 3].equals("isbn"))
-                                                                                    book.setISBN(tmp[tmp.length - 2].substring(0, tmp[tmp.length - 2].length() - 1));
+//                                                                                String buf = EditText(personNode4.getNodeName(), personNode4.getTextContent());
+//                                                                                String[] tmp = buf.split("/");
+//                                                                                if (tmp[tmp.length - 3].equals("isbn"))
+//                                                                                    book.setISBN(tmp[tmp.length - 2].substring(0, tmp[tmp.length - 2].length() - 1));
                                                                             }
                                                                         }
                                                                     }
@@ -138,8 +139,7 @@ public class XmlParser {
         return new Book();
     }
 
-
-    public static String EditText(String remove, String text) {
+    private static String EditText(String remove, String text) {
         return text.replaceAll(String.format("<%s>", remove), "").replaceAll(String.format("</%s>", remove), "");
     }
 }

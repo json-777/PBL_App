@@ -19,7 +19,6 @@ public class Book {
     private ArrayList<String> AuthorList = new ArrayList<String>();
     private ArrayList<String> AuthorListKana = new ArrayList<String>();
     private String ISBN = "";
-    private String Publisher = "";
     private String Image_URL;
 
     public String getTitle(){
@@ -30,10 +29,6 @@ public class Book {
         return this.ISBN;
     }
 
-    public String getPublisher(){
-        return this.Publisher;
-    }
-
     public String getAuthor(int i){
         return this.AuthorList.get(i);
     }
@@ -41,6 +36,7 @@ public class Book {
     public String getAuthorKana(int i){
         return this.AuthorListKana.get(i);
     }
+
 
     public int getAuthorLength(){
         return this.AuthorList.size();
@@ -55,9 +51,6 @@ public class Book {
         this.ISBN = isbn;
     }
 
-    public void setPublisher(String pub) {
-        this.Publisher = pub;
-    }
 
     public void addAuthor(String Author,String kana){
         this.AuthorList.add(Author);
