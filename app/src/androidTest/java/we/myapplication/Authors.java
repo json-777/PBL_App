@@ -7,7 +7,7 @@ import org.simpleframework.xml.Root;
  * Created by 一樹 on 2016/11/20.
  */
 @Root
-public class Authors {
+public class Authors  {
     public String getAuthor_Kana() {
         return Author_Kana;
     }

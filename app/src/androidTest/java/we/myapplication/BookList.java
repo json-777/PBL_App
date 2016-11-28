@@ -19,11 +19,11 @@ public class BookList {
         this.version = version;
     }
 
-    public List<BookElement>getBooks() {
+    public List<Book>getBooks() {
         return Books;
     }
 
-    public void setBooks(List<BookElement> book) {
+    public void setBooks(List<Book> book) {
         Books = book;
     }
 
@@ -33,10 +33,5 @@ public class BookList {
 
     /*本のリスト*/
     @ElementList
-    private List<BookElement> Books;
-
-    public BookList(List<BookElement> books){
-        this.Books = books;
-    }
-    public BookList(){}
+    private List<Book> Books;
 }
